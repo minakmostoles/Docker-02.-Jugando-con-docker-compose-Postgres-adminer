@@ -1,0 +1,37 @@
+version: '3'
+#Version 20.08.0.031
+services:
+    mydb:
+        image: postgres:13
+        container_name: "pg_demo_bd"
+        restart: always
+        ports:
+            - 5432:5432
+        expose:
+            - "5432"
+        environment:
+            - /etc/localtime:/etc/localtime:ro
+            - POSTGRES_DB=pg_demo
+            - POSTGRES_USER=mrubiodev
+            - POSTGRES_PASSWORD=?test1234
+            - PGDATA=/var/lib/postgresql/data/db-files/
+        volumes:
+            - /media/docker/app/pg_demo:/var/lib/postgresql/data
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "25m"
+    adminer:
+        image: adminer
+        container_name: "pg_demo_gestor"
+        restart: always
+        depends_on:
+            -  mydb
+        ports:
+            - 8080:8080
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "25m"
+        
+

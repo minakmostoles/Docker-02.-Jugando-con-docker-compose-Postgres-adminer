@@ -1,0 +1,54 @@
+version: '3.1'
+#Version 20.08.0.031 SECRETOS
+#Activar el modo Modo enjambre habilitado docker stack deploy  
+#o docker swarm init docker swarm leave --force
+#Los secretos de Docker se almacenan en archivos en la carpeta /run/secrets del contenedor.
+#Es por eso que tenemos que especificar nuevas variables de entorno para leer los secretos
+#almacenados en estos archivos.
+services:
+    mydb:
+        image: postgres:13
+        container_name: "pg_demo_bd"
+        restart: always
+        ports:
+            - 5432:5432
+        expose:
+            - "5432"
+        environment:
+            - /etc/localtime:/etc/localtime:ro
+            - POSTGRES_DB_FILE=/run/secrets/ps_s_bd_name
+            - POSTGRES_USER_FILE=/run/secrets/ps_s_user
+            - POSTGRES_PASSWORD_FILE=/run/secrets/ps_s_pass
+            - PGDATA=/var/lib/postgresql/data/db-files/
+        secrets:
+            - ps_s_bd_name
+            - ps_s_user
+            - ps_s_pass
+        volumes:
+            - /media/docker/app/pg_demo:/var/lib/postgresql/data
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "25m"
+    adminer:
+        image: adminer
+        container_name: "pg_demo_gestor"
+        restart: always
+        depends_on:
+            -  mydb
+        ports:
+            - 8080:8080
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "25m"
+
+secrets:
+    ps_s_bd_name:
+        file: ./s_db_name.txt
+    ps_s_user:
+        file: ./s_user.txt
+    ps_s_pass:
+        file: ./s_pass.txt
+
+
