@@ -1,4 +1,4 @@
-# Docker-02.-Jugando-con-docker-compose-Postgres-adminer-
+# Docker-02.-Jugando-con-docker-compose-Postgres-adminer
 VideoTutorial 02 Jugando con docker compose (Postgres + adminer)
 
 Tenemos docker-compose uno de ellos usando secret.
